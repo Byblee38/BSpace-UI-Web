@@ -509,7 +509,12 @@ const ShareFile = () => {
       return
     }
     if (!current || !options.find((preview) => preview.name === current.name)) {
-      setCurrentPreview(options[0])
+      // Cari opsi yang bernama "Download", jika ada jadikan default.
+      // Jika tidak ada, fallback ke opsi pertama (options[0]).
+      const downloadOption = options.find(
+        (preview) => preview.name.toLowerCase() === "download",
+      )
+      setCurrentPreview(downloadOption || options[0])
     }
   })
 

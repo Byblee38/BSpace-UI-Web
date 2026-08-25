@@ -20,7 +20,12 @@ export const setSettings = (items: Record<string, string>) => {
   )
 }
 
-export const getSetting = (key: string) => settings[key] ?? ""
+export const getSetting = (key: string) => {
+  if (key === "site_title" && !settings["site_title"]) {
+    return "BySpace"
+  }
+  return settings[key] ?? ""
+}
 export const getSettingBool = (key: string) => {
   const value = getSetting(key)
   return value === "true" || value === "1"

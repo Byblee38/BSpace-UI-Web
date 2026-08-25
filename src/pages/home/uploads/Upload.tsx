@@ -236,9 +236,10 @@ const Upload = () => {
         when={!uploading()}
         fallback={
           <>
-            <HStack spacing="$2">
+            <HStack spacing="$2" flexWrap="wrap" justifyContent="center">
               <Show when={hasBackgroundTask()}>
                 <Button
+                  size="sm"
                   colorScheme="primary"
                   onClick={() => {
                     window.open(joinBase("/@manage/tasks/upload"), "_blank")
@@ -248,6 +249,7 @@ const Upload = () => {
                 </Button>
               </Show>
               <Button
+                size="sm"
                 colorScheme="accent"
                 onClick={() => {
                   setUploadFiles("uploads", (_uploads) =>
@@ -262,6 +264,7 @@ const Upload = () => {
               </Button>
               <Show when={allDone()}>
                 <Button
+                  size="sm"
                   onClick={() => {
                     setUploading(false)
                   }}
@@ -337,16 +340,20 @@ const Upload = () => {
             }
             handleAddFiles(res)
           }}
-          spacing="$4"
-          // py="$4"
-          h="$56"
+          spacing="$3"
+          py="$4"
+          px="$2"
+          minH="$56"
+          h="auto"
         >
           <Show
             when={!drag()}
-            fallback={<Heading>{t("home.upload.release")}</Heading>}
+            fallback={<Heading size="lg">{t("home.upload.release")}</Heading>}
           >
-            <Heading>{t("home.upload.upload-tips")}</Heading>
-            <Box w="30%">
+            <Heading size="md" textAlign="center" px="$2">
+              {t("home.upload.upload-tips")}
+            </Heading>
+            <Box w={{ "@initial": "90%", "@sm": "50%", "@md": "35%" }}>
               <SelectWrapper
                 value={curUploader().name}
                 onChange={(name) => {
@@ -362,10 +369,10 @@ const Upload = () => {
                 })}
               />
             </Box>
-            <HStack spacing="$4">
+            <HStack spacing="$4" justifyContent="center">
               <IconButton
                 compact
-                size="xl"
+                size="lg"
                 aria-label={t("home.upload.upload_folder")}
                 colorScheme="accent"
                 icon={<RiDocumentFolderUploadFill />}
@@ -375,7 +382,7 @@ const Upload = () => {
               />
               <IconButton
                 compact
-                size="xl"
+                size="lg"
                 aria-label={t("home.upload.upload_files")}
                 icon={<RiDocumentFileUploadFill />}
                 onClick={() => {
@@ -383,12 +390,18 @@ const Upload = () => {
                 }}
               />
             </HStack>
-            <HStack spacing="$4">
+            <HStack
+              spacing={{ "@initial": "$2", "@sm": "$4" }}
+              flexWrap="wrap"
+              justifyContent="center"
+              px="$2"
+            >
               <Checkbox
                 checked={asTask()}
                 onChange={() => {
                   setAsTask(!asTask())
                 }}
+                size="sm"
               >
                 {t("home.upload.add_as_task")}
               </Checkbox>
@@ -397,6 +410,7 @@ const Upload = () => {
                 onChange={() => {
                   setOverwrite(!overwrite())
                 }}
+                size="sm"
               >
                 {t("home.conflict_policy.overwrite_existing")}
               </Checkbox>
@@ -405,6 +419,7 @@ const Upload = () => {
                 onChange={() => {
                   setRapid(!rapid())
                 }}
+                size="sm"
               >
                 {t("home.upload.try_rapid")}
               </Checkbox>

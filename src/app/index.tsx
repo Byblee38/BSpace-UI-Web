@@ -10,7 +10,7 @@ import "../styles.css"
 const Index = () => {
   globalStyles()
   return (
-    <HopeProvider config={theme}>
+    <HopeProvider config={{ ...theme, initialColorMode: "dark" }}>
       <ErrorBoundary
         fallback={(err) => {
           console.error("error", err)

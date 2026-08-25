@@ -27,8 +27,7 @@ export default defineConfig({
   base: process.env.NODE_ENV === "production" ? "/__dynamic_base__/" : "/",
   // base: "/",
   build: {
-    // target: "es2015", //next
-    // polyfillDynamicImport: false,
+    minify: 'esbuild', 
   },
   // experimental: {
   //   renderBuiltUrl: (filename, { type, hostId, hostType }) => {
@@ -47,5 +46,9 @@ export default defineConfig({
         // rewrite: (path) => path.replace(/^\/api/, ""),
       },
     },
+ allowedHosts: [
+      'xxxx-xxx-xxx.ngrok-free.app', // Replace with your exact ngrok URL
+      '.ngrok-free.app'               // OR use a dot prefix to allow all ngrok subdomains
+    ]
   },
 })

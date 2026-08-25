@@ -71,7 +71,6 @@ const SideMenuItemWithTo = (props: SideMenuItemProps) => {
       as={Link}
       href={props.to}
       onClick={(e: any) => {
-        // to(props.to!);
         onClose()
         if (props.refresh) {
           e.stopPropagation?.()
@@ -84,28 +83,32 @@ const SideMenuItemWithTo = (props: SideMenuItemProps) => {
       }}
       w="$full"
       alignItems="center"
+      style={{
+        transition: "all 0.15s ease",
+        border: isActive() ? "1px solid #38BDF8" : "1px solid transparent",
+        "border-radius": "8px",
+      }}
       _hover={{
-        bgColor: isActive() ? "$info4" : hoverColor(),
+        bgColor: "#1E2638",
+        color: "#E2E8F0",
         textDecoration: "none",
       }}
-      px="$2"
-      py="$1_5"
-      rounded="$md"
+      px="$3"
+      py="$2"
       cursor="pointer"
-      bgColor={isActive() ? "$info4" : ""}
-      color={isActive() ? "$info11" : ""}
+      bgColor={isActive() ? "rgba(56, 189, 248, 0.12)" : "transparent"}
+      color={isActive() ? "#38BDF8" : "#94A3B8"}
       external={props.external}
-      // _active={{ transform: "scale(.95)", transition: "0.1s" }}
     >
-      <HStack spacing="$2">
+      <HStack spacing="$2_5">
         <Show when={props.icon}>
           {typeof props.icon === "function" ? (
             props.icon({ active: isActive() })
           ) : (
-            <Icon as={props.icon} />
+            <Icon as={props.icon} boxSize="$4" />
           )}
         </Show>
-        <Heading>{t(props.title)}</Heading>
+        <Heading size="sm" fontWeight={isActive() ? "600" : "500"}>{t(props.title)}</Heading>
       </HStack>
     </AnchorWithBase>
   )
@@ -136,32 +139,38 @@ const SideMenuItemWithChildren = (props: SideMenuItemProps) => {
         }}
         w="$full"
         alignItems="center"
-        _hover={{
-          bgColor: hoverColor(),
+        style={{
+          transition: "all 0.15s ease",
+          "border-radius": "8px",
         }}
-        px="$2"
-        py="$1_5"
-        rounded="$md"
+        _hover={{
+          bgColor: "#1E2638",
+          color: "#E2E8F0",
+        }}
+        px="$3"
+        py="$2"
         cursor="pointer"
+        color="#94A3B8"
       >
-        <HStack spacing="$2">
+        <HStack spacing="$2_5">
           <Show when={props.icon}>
             {typeof props.icon === "function" ? (
               props.icon({ active: false })
             ) : (
-              <Icon as={props.icon} />
+              <Icon as={props.icon} boxSize="$4" />
             )}
           </Show>
-          <Heading>{t(props.title)}</Heading>
+          <Heading size="sm" fontWeight="500">{t(props.title)}</Heading>
         </HStack>
         <Icon
           as={BiSolidRightArrow}
+          boxSize="$3"
           transform={open() ? "rotate(90deg)" : "none"}
-          transition="transform 0.2s"
+          transition="transform 0.15s"
         />
       </Flex>
       <Show when={open() && hasVisibleChildren()}>
-        <Box pl="$2">
+        <Box pl="$3" mt="$1">
           <SideMenu items={props.children!} />
         </Box>
       </Show>

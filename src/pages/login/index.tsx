@@ -335,12 +335,16 @@ const Login = () => {
               w="151px"
               h="auto"
               src={
+                !getSetting("logo") ||
                 getSetting("logo").split("\n")[0] ===
                 "https://cdn.jsdelivr.net/gh/alist-org/logo@main/logo.svg"
-                  ? joinBase("/images/new_icon.png")
+                  ? joinBase("/logo.webp")
                   : getSetting("logo").split("\n")[0]
               }
-              alt="AList Logo"
+              fallback={
+                <Heading size="lg" color="#38BDF8">BySpace</Heading>
+              }
+              alt="BySpace Logo"
             />
           </HStack>
         </Show>
@@ -417,11 +421,6 @@ const Login = () => {
                   >
                     {t("login.remember")}
                   </Checkbox>
-                  <Show when={!isRegisterMode()}>
-                    <Text as="a" target="_blank" href={t("login.forget_url")}>
-                      {t("login.forget")}
-                    </Text>
-                  </Show>
                   <Show when={isRegisterMode()}>
                     <Text
                       as="a"
@@ -539,7 +538,7 @@ const Login = () => {
               <Heading color="#3573FF" fontSize="18px">
                 {isRegisterMode()
                   ? t("login.register")
-                  : t("login.password_login")}
+                  : t("login.login")}
               </Heading>
             </Flex>
             <Divider borderColor="#E9E9E9" />
@@ -635,32 +634,23 @@ const Login = () => {
                     flex={1}
                   />
                   <IconButton
-                    size="md"
+                    size="sm"
                     variant="ghost"
                     icon={showPassword() ? <FiEyeOff /> : <FiEye />}
                     onClick={() => setShowPassword(!showPassword())}
-                    color="$neutral8"
-                    aria-label={showPassword() ? "隐藏密码" : "显示密码"}
+                    color="#94A3B8"
+                    aria-label={showPassword() ? "Hide password" : "Show password"}
                     _hover={{
-                      backgroundColor: "$neutral3",
+                      color: "#38BDF8",
+                      backgroundColor: "rgba(56, 189, 248, 0.1)",
+                    }}
+                    style={{
+                      border: "none",
+                      "border-radius": "6px",
+                      transition: "all 0.15s ease",
                     }}
                   />
                 </HStack>
-              </Show>
-              {/* 新版本忘记密码 */}
-              <Show when={!isRegisterMode()}>
-                <Flex
-                  px="$1"
-                  w="$full"
-                  fontSize="$sm"
-                  color="$neutral10"
-                  justifyContent="flex-end"
-                  alignItems="center"
-                >
-                  <Text as="a" target="_blank" href={t("login.forget_url")}>
-                    {t("login.forget")}
-                  </Text>
-                </Flex>
               </Show>
             </Show>
             <VStack w="$full" spacing="$4">

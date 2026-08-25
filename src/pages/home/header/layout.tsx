@@ -25,10 +25,18 @@ export const Layout = () => {
     <Menu>
       <MenuTrigger
         as={IconButton}
-        color={getMainColor()}
-        bgColor={changeColor(getMainColor(), { alpha: 0.15 })}
+        style={{
+          "border-color": "#262F40",
+          color: "#94A3B8",
+          "border-radius": "8px",
+          background: "rgba(22, 27, 38, 0.8)",
+          border: "1px solid #262F40",
+          transition: "all 0.15s ease",
+        }}
         _hover={{
-          bgColor: changeColor(getMainColor(), { alpha: 0.2 }),
+          borderColor: "#38BDF8",
+          color: "#38BDF8",
+          background: "#1E2638",
         }}
         aria-label="switch layout"
         compact

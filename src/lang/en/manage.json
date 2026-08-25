@@ -42,7 +42,7 @@
     "traffic": "Traffic",
     "frp": "FRP Tunnel"
   },
-  "title": "AList Manage",
+  "title": "BySpace Manage",
   "not_admin": "You are not admin user, please login with admin account.",
   "logout_success": "Logout successfully",
   "send": "Send",

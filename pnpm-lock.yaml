@@ -170,7 +170,7 @@ importers:
         version: 2.0.1
       '@vitejs/plugin-legacy':
         specifier: ^2.0.1
-        version: 2.0.1(terser@5.14.2)(vite@4.5.13(@types/node@20.0.0)(terser@5.14.2))
+        version: 2.0.1(terser@5.50.0)(vite@4.5.13(@types/node@20.0.0)(terser@5.50.0))
       husky:
         specifier: ^8.0.2
         version: 8.0.2
@@ -184,20 +184,20 @@ importers:
         specifier: ^3.5.0
         version: 3.5.0
       terser:
-        specifier: ^5.14.2
-        version: 5.14.2
+        specifier: ^5.50.0
+        version: 5.50.0
       typescript:
         specifier: ^4.7.4
         version: 4.7.4
       vite:
         specifier: ^4.5.13
-        version: 4.5.13(@types/node@20.0.0)(terser@5.14.2)
+        version: 4.5.13(@types/node@20.0.0)(terser@5.50.0)
       vite-plugin-dynamic-base:
         specifier: ^0.4.4
         version: 0.4.4
       vite-plugin-solid:
         specifier: ^2.3.0
-        version: 2.3.0(solid-js@1.4.8)(vite@4.5.13(@types/node@20.0.0)(terser@5.14.2))
+        version: 2.3.0(solid-js@1.4.8)(vite@4.5.13(@types/node@20.0.0)(terser@5.50.0))
 
 packages:
 
@@ -526,6 +526,9 @@ packages:
     resolution: {integrity: sha512-sQXCasFk+U8lWYEe66WxRDOE9PjVz4vSM51fTu3Hw+ClTpUSQb718772vH3pyS5pShp6lvQM7SxgIDXXXmOX7w==}
     engines: {node: '>=6.0.0'}
 
+  '@jridgewell/gen-mapping@0.3.13':
+    resolution: {integrity: sha512-2kkt/7niJ6MgEPxF0bYdQ6etZaA+fQvDcLKckhy1yIQOzaoKjBBjSj63/aLVjYE3qhRt5dvM+uUyfCg6UKCBbA==}
+
   '@jridgewell/gen-mapping@0.3.2':
     resolution: {integrity: sha512-mh65xKQAzI6iBcFzwv28KVWSmCkdRBWoOh+bYQGW3+6OZvbbN3TqMGo5hqYxQniRcH9F2VZIoJCm4pa3BPDK/A==}
     engines: {node: '>=6.0.0'}
@@ -538,14 +541,20 @@ packages:
     resolution: {integrity: sha512-xnkseuNADM0gt2bs+BvhO0p78Mk762YnZdsuzFV018NoG1Sj1SCQvpSqa7XUaTam5vAGasABV9qXASMKnFMwMw==}
     engines: {node: '>=6.0.0'}
 
-  '@jridgewell/source-map@0.3.2':
-    resolution: {integrity: sha512-m7O9o2uR8k2ObDysZYzdfhb08VuEml5oWGiosa1VdaPZ/A6QyPkAJuwN0Q1lhULOf6B7MtQmHENS743hWtCrgw==}
+  '@jridgewell/source-map@0.3.11':
+    resolution: {integrity: sha512-ZMp1V8ZFcPG5dIWnQLr3NSI1MiCU7UETdS/A0G8V/XWHvJv3ZsFqutJn1Y5RPmAPX6F3BiE397OqveU/9NCuIA==}
 
   '@jridgewell/sourcemap-codec@1.4.14':
     resolution: {integrity: sha512-XPSJHWmi394fuUuzDnGz1wiKqWfo1yXecHQMRf2l6hztTO+nPru658AyDngaBe7isIxEkRsPR3FZh+s7iVa4Uw==}
 
+  '@jridgewell/sourcemap-codec@1.5.5':
+    resolution: {integrity: sha512-cYQ9310grqxueWbl+WuIUIaiUaDcj7WOq5fVhEljNVgRfOUhY9fy2zTvfoqWsnebh8Sl70VScFbICvJnLKB0Og==}
+
   '@jridgewell/trace-mapping@0.3.15':
     resolution: {integrity: sha512-oWZNOULl+UbhsgB51uuZzglikfIKSUBO/M9W2OfEjn7cmqoAiCgmv9lyACTUacZwBz0ITnJ2NqjU8Tx0DHL88g==}
+
+  '@jridgewell/trace-mapping@0.3.31':
+    resolution: {integrity: sha512-zzNR+SdQSDJzc8joaeP8QQoCQr8NuYx2dIIytl1QeBEZHJ9uW6hebsrYgbz8hJwUQao3TWCMtmfV8Nu1twOLAw==}
 
   '@monaco-editor/loader@1.4.0':
     resolution: {integrity: sha512-00ioBig0x642hytVspPl7DbQyaSWRaolYie/UFNjoTdvoKPzo6xrXLhTk9ixgIKcLH5b5vDOjVNiGyY+uDCUlg==}
@@ -709,8 +718,8 @@ packages:
       terser: ^5.4.0
       vite: ^3.0.0
 
-  acorn@8.8.0:
-    resolution: {integrity: sha512-QOxyigPVrpZ2GXT+PFyZTl6TtOFc5egxHIP9IlQ+RbupQuX4RkT/Bee4/kQuC02Xkzg84JcT7oLYtDIQxp+v7w==}
+  acorn@8.18.0:
+    resolution: {integrity: sha512-lGq+9yr1/GuAWaVYIHRjvvySG5/4VfKIvC8EWxStPdcDh/Ka7FG3twP6v4d5BkravUilhIAsG4Qj83t02LWUPQ==}
     engines: {node: '>=0.4.0'}
     hasBin: true
 
@@ -1898,8 +1907,8 @@ packages:
     resolution: {integrity: sha512-a20gEsvHnWe0ygBY8JbxoM4w3SJdhc7ZAuxkLqh+nvNQN2IOt0B5lLgM490X5Hl8FF0dl0tOf2ewFYAlIFgzVA==}
     engines: {node: '>=4.5'}
 
-  terser@5.14.2:
-    resolution: {integrity: sha512-oL0rGeM/WFQCUd0y2QrWxYnq7tfSuKBiqTjRPWrRgB46WD/kiwHwF8T23z78H6Q6kGCuuHcPB+KULHRdxvVGQA==}
+  terser@5.50.0:
+    resolution: {integrity: sha512-CN9BVxWhgS/hRxtUMjtC2uRWSTcSfQFHMDWma6sKKfIivCD91sM+FOPfvwoaRMqCSrUpe1nv3jDamd9eEQ4y+w==}
     engines: {node: '>=10'}
     hasBin: true
 
@@ -2424,6 +2433,11 @@ snapshots:
       '@jridgewell/set-array': 1.1.2
       '@jridgewell/sourcemap-codec': 1.4.14
 
+  '@jridgewell/gen-mapping@0.3.13':
+    dependencies:
+      '@jridgewell/sourcemap-codec': 1.5.5
+      '@jridgewell/trace-mapping': 0.3.31
+
   '@jridgewell/gen-mapping@0.3.2':
     dependencies:
       '@jridgewell/set-array': 1.1.2
@@ -2434,14 +2448,21 @@ snapshots:
 
   '@jridgewell/set-array@1.1.2': {}
 
-  '@jridgewell/source-map@0.3.2':
+  '@jridgewell/source-map@0.3.11':
     dependencies:
-      '@jridgewell/gen-mapping': 0.3.2
-      '@jridgewell/trace-mapping': 0.3.15
+      '@jridgewell/gen-mapping': 0.3.13
+      '@jridgewell/trace-mapping': 0.3.31
 
   '@jridgewell/sourcemap-codec@1.4.14': {}
 
+  '@jridgewell/sourcemap-codec@1.5.5': {}
+
   '@jridgewell/trace-mapping@0.3.15':
+    dependencies:
+      '@jridgewell/resolve-uri': 3.1.0
+      '@jridgewell/sourcemap-codec': 1.4.14
+
+  '@jridgewell/trace-mapping@0.3.31':
     dependencies:
       '@jridgewell/resolve-uri': 3.1.0
       '@jridgewell/sourcemap-codec': 1.4.14
@@ -2615,17 +2636,17 @@ snapshots:
 
   '@viselect/vanilla@3.5.0': {}
 
-  '@vitejs/plugin-legacy@2.0.1(terser@5.14.2)(vite@4.5.13(@types/node@20.0.0)(terser@5.14.2))':
+  '@vitejs/plugin-legacy@2.0.1(terser@5.50.0)(vite@4.5.13(@types/node@20.0.0)(terser@5.50.0))':
     dependencies:
       '@babel/standalone': 7.18.12
       core-js: 3.24.1
       magic-string: 0.26.2
       regenerator-runtime: 0.13.9
       systemjs: 6.12.3
-      terser: 5.14.2
-      vite: 4.5.13(@types/node@20.0.0)(terser@5.14.2)
+      terser: 5.50.0
+      vite: 4.5.13(@types/node@20.0.0)(terser@5.50.0)
 
-  acorn@8.8.0: {}
+  acorn@8.18.0: {}
 
   aggregate-error@3.1.0:
     dependencies:
@@ -3994,10 +4015,10 @@ snapshots:
       safe-buffer: 5.2.1
       yallist: 3.1.1
 
-  terser@5.14.2:
+  terser@5.50.0:
     dependencies:
-      '@jridgewell/source-map': 0.3.2
-      acorn: 8.8.0
+      '@jridgewell/source-map': 0.3.11
+      acorn: 8.18.0
       commander: 2.20.3
       source-map-support: 0.5.21
 
@@ -4116,7 +4137,7 @@ snapshots:
     dependencies:
       node-html-parser: 5.4.1
 
-  vite-plugin-solid@2.3.0(solid-js@1.4.8)(vite@4.5.13(@types/node@20.0.0)(terser@5.14.2)):
+  vite-plugin-solid@2.3.0(solid-js@1.4.8)(vite@4.5.13(@types/node@20.0.0)(terser@5.50.0)):
     dependencies:
       '@babel/core': 7.18.10
       '@babel/preset-typescript': 7.18.6(@babel/core@7.18.10)
@@ -4124,11 +4145,11 @@ snapshots:
       merge-anything: 5.0.2
       solid-js: 1.4.8
       solid-refresh: 0.4.1(solid-js@1.4.8)
-      vite: 4.5.13(@types/node@20.0.0)(terser@5.14.2)
+      vite: 4.5.13(@types/node@20.0.0)(terser@5.50.0)
     transitivePeerDependencies:
       - supports-color
 
-  vite@4.5.13(@types/node@20.0.0)(terser@5.14.2):
+  vite@4.5.13(@types/node@20.0.0)(terser@5.50.0):
     dependencies:
       esbuild: 0.18.20
       postcss: 8.5.3
@@ -4136,7 +4157,7 @@ snapshots:
     optionalDependencies:
       '@types/node': 20.0.0
       fsevents: 2.3.3
-      terser: 5.14.2
+      terser: 5.50.0
 
   web-namespaces@2.0.1: {}
 
