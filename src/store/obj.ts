@@ -1,0 +1,344 @@
+import naturalSort from "typescript-natural-sort"
+import { cookieStorage, createStorageSignal } from "@solid-primitives/storage"
+import { createMemo, createSignal } from "solid-js"
+import { createStore, produce } from "solid-js/store"
+import { Obj, StoreObj } from "~/types"
+import { bus, log, trimBase } from "~/utils"
+import { keyPressed } from "./key-event"
+import { local } from "./local_settings"
+import { getSettingBool } from "./settings"
+
+export enum State {
+  Initial, // Initial state
+  FetchingObj,
+  FetchingObjs,
+  FetchingMore,
+  Folder, // Folder state
+  File, // File state
+  NeedPassword,
+}
+
+const [objStore, setObjStore] = createStore<{
+  obj: Obj
+  raw_url: string
+  related: Obj[]
+
+  objs: StoreObj[]
+  total: number
+  write?: boolean
+
+  readme: string
+  header: string
+  provider: string
+  web_proxy: boolean
+  // pageIndex: number;
+  // pageSize: number;
+  state: State
+  err: string
+}>({
+  obj: {} as Obj,
+  raw_url: "",
+  related: [],
+
+  objs: [],
+  total: 0,
+
+  readme: "",
+  header: "",
+  provider: "",
+  web_proxy: false,
+  // pageIndex: 1,
+  // pageSize: 50,
+  state: State.Initial,
+  err: "",
+})
+
+const setObjs = (objs: Obj[]) => {
+  lastChecked.start = -1
+  lastChecked.end = -1
+  setObjStore("objs", objs)
+  applySortPreference()
+  setObjStore("obj", "is_dir", true)
+}
+
+export const ObjStore = {
+  set: (data: object) => {
+    setObjStore(data)
+  },
+  setObj: (obj: Obj) => {
+    setObjStore("obj", obj)
+  },
+  setRawUrl: (raw_url: string) => {
+    setObjStore("raw_url", raw_url)
+  },
+  setProvider: (provider: string) => {
+    setObjStore("provider", provider)
+  },
+  setWebProxy: (web_proxy: boolean) => {
+    setObjStore("web_proxy", web_proxy)
+  },
+  setObjs: setObjs,
+  setTotal: (total: number) => {
+    setObjStore("total", total)
+  },
+  setReadme: (readme: string) => setObjStore("readme", readme),
+  setHeader: (header: string) => setObjStore("header", header),
+  setRelated: (related: Obj[]) => setObjStore("related", related),
+  setWrite: (write: boolean) => setObjStore("write", write),
+  // setGetResp: (resp: FsGetResp) => {
+  //   setObjStore("obj", resp.data);
+  //   setObjs(resp.data.related);
+  //   setObjStore("readme", resp.data.readme);
+  // },
+  // setListResp: (resp: FsListResp) => {
+  //   setObjs(resp.data.content);
+  //   setObjStore("readme", resp.data.readme);
+  //   setObjStore("write", resp.data.write);
+  // },
+  setState: (state: State) => setObjStore("state", state),
+  setErr: (err: string) => setObjStore("err", err),
+}
+
+export type OrderBy = "name" | "size" | "modified"
+
+export const sortObjs = (orderBy: OrderBy, reverse?: boolean) => {
+  log("sort:", orderBy, reverse)
+  naturalSort.insensitive = true
+  setObjStore(
+    "objs",
+    produce((objs) =>
+      objs.sort((a, b) => {
+        return (reverse ? -1 : 1) * naturalSort(a[orderBy], b[orderBy])
+      }),
+    ),
+  )
+}
+
+export const appendObjs = (objs: Obj[]) => {
+  setObjStore(
+    "objs",
+    produce((prev) => prev.push(...objs)),
+  )
+  applySortPreference()
+}
+
+const lastChecked = {
+  start: -1,
+  end: -1,
+}
+
+export const selectIndex = (index: number, checked: boolean, one?: boolean) => {
+  if (one) {
+    selectAll(false)
+  }
+  if (keyPressed["Shift"]) {
+    if (lastChecked.start < 0) {
+      for (
+        let i = 0;
+        i < Math.max(index + 1, objStore.objs.length - index);
+        ++i
+      ) {
+        if (objStore.objs[index - i]?.selected) {
+          lastChecked.start = index - i
+          lastChecked.end = index - i
+          break
+        } else if (objStore.objs[index + i]?.selected) {
+          lastChecked.start = index + i
+          lastChecked.end = index + i
+          break
+        }
+      }
+    }
+    const countUncheck = Math.abs(lastChecked.end - lastChecked.start)
+    const signUncheck = Math.sign(lastChecked.end - lastChecked.start)
+    for (let i = 1; i <= countUncheck; ++i) {
+      setObjStore("objs", lastChecked.start + signUncheck * i, {
+        selected: false,
+      })
+    }
+    const countCheck = Math.abs(index - lastChecked.start)
+    const signCheck = Math.sign(index - lastChecked.start)
+    for (let i = 0; i <= countCheck; ++i) {
+      setObjStore("objs", lastChecked.start + signCheck * i, { selected: true })
+    }
+    lastChecked.end = index
+  } else {
+    setObjStore("objs", index, { selected: checked })
+    if (checked) {
+      lastChecked.start = index
+      lastChecked.end = index
+    } else {
+      lastChecked.end = -1
+      lastChecked.start = -1
+    }
+  }
+}
+
+export const selectAll = (checked: boolean) => {
+  setObjStore("objs", {}, (obj) => ({ selected: checked }))
+}
+
+export const selectedObjs = () => {
+  return objStore.objs.filter((obj) => obj.selected)
+}
+
+export const allChecked = () => {
+  return objStore.objs.length === selectedNum()
+}
+
+export const oneChecked = () => {
+  return selectedNum() === 1
+}
+
+export const haveSelected = () => {
+  return selectedNum() > 0
+}
+
+export const isIndeterminate = () => {
+  return selectedNum() > 0 && selectedNum() < objStore.objs.length
+}
+
+const selectedNum = createMemo(() => selectedObjs().length)
+
+export type LayoutType = "list" | "grid" | "image"
+const [pathname, setPathname] = createSignal<string>(location.pathname)
+const layoutRecord: Record<string, LayoutType> = (() => {
+  try {
+    return JSON.parse(localStorage.getItem("layoutRecord") || "{}")
+  } catch (e) {
+    return {}
+  }
+})()
+type SortPreference = { orderBy: OrderBy; reverse: boolean }
+const activeSortRecord: Record<string, SortPreference> = {}
+const sortRecord: Record<string, SortPreference> = (() => {
+  try {
+    return JSON.parse(localStorage.getItem("sortRecord") || "{}")
+  } catch (e) {
+    return {}
+  }
+})()
+const globalSortRecordKey = "globalSortPreference"
+const isFrontendRememberSortEnabled = () =>
+  getSettingBool("frontend_remember_sort")
+const getGlobalSortPreference = (): SortPreference | undefined => {
+  try {
+    const preference = JSON.parse(
+      localStorage.getItem(globalSortRecordKey) || "null",
+    ) as SortPreference | null
+    if (!preference || !isValidOrderBy(preference.orderBy)) {
+      return undefined
+    }
+    return {
+      orderBy: preference.orderBy,
+      reverse: !!preference.reverse,
+    }
+  } catch (e) {
+    return undefined
+  }
+}
+
+bus.on("pathname", (p) => setPathname(p))
+
+export const getCurrentPath = () => {
+  return trimBase(pathname())
+}
+
+const normalizeSortPath = (path: string) => {
+  if (!path || path === "/") return "/"
+  const normalized = path.replace(/\/+$/g, "")
+  return normalized || "/"
+}
+
+const isValidOrderBy = (value: unknown): value is OrderBy => {
+  return value === "name" || value === "size" || value === "modified"
+}
+
+export const getSortPreference = (
+  path = getCurrentPath(),
+): { orderBy: OrderBy; reverse: boolean } | undefined => {
+  const normalizedPath = normalizeSortPath(path)
+  const preference = activeSortRecord[normalizedPath]
+  if (preference && isValidOrderBy(preference.orderBy)) {
+    return {
+      orderBy: preference.orderBy,
+      reverse: !!preference.reverse,
+    }
+  }
+  if (!isFrontendRememberSortEnabled()) return undefined
+  const storedPreference = sortRecord[normalizedPath]
+  if (storedPreference && isValidOrderBy(storedPreference.orderBy)) {
+    return {
+      orderBy: storedPreference.orderBy,
+      reverse: !!storedPreference.reverse,
+    }
+  }
+  return getGlobalSortPreference()
+}
+
+export const setSortPreference = (
+  orderBy: OrderBy,
+  reverse = false,
+  path = getCurrentPath(),
+) => {
+  const normalizedPath = normalizeSortPath(path)
+  activeSortRecord[normalizedPath] = {
+    orderBy,
+    reverse,
+  }
+  if (!isFrontendRememberSortEnabled()) return
+  sortRecord[normalizedPath] = {
+    orderBy,
+    reverse,
+  }
+  localStorage.setItem("sortRecord", JSON.stringify(sortRecord))
+  localStorage.setItem(
+    globalSortRecordKey,
+    JSON.stringify({
+      orderBy,
+      reverse,
+    } satisfies SortPreference),
+  )
+}
+
+export const applySortPreference = (path = getCurrentPath()) => {
+  const preference = getSortPreference(path)
+  if (!preference) return
+  sortObjs(preference.orderBy, preference.reverse)
+}
+
+const [_layout, _setLayout] = createSignal<LayoutType>(
+  layoutRecord[pathname()] || local["global_default_layout"],
+)
+export const layout = () => {
+  const layout = layoutRecord[pathname()]
+  _setLayout(layout || local["global_default_layout"])
+  return _layout()
+}
+export const setLayout = (layout: LayoutType) => {
+  layoutRecord[pathname()] = layout
+  console.log("setLayout", layoutRecord)
+  localStorage.setItem("layoutRecord", JSON.stringify(layoutRecord))
+  _setLayout(layout)
+}
+
+const [_checkboxOpen, setCheckboxOpen] = createStorageSignal<string>(
+  "checkbox-open",
+  "false",
+)
+export const checkboxOpen = () => _checkboxOpen() === "true"
+
+export const toggleCheckbox = () => {
+  setCheckboxOpen(checkboxOpen() ? "false" : "true")
+}
+
+export { objStore }
+// browser password
+const [_password, _setPassword] = createSignal<string>(
+  cookieStorage.getItem("browser-password") || "",
+)
+export { _password as password }
+export const setPassword = (password: string) => {
+  _setPassword(password)
+  cookieStorage.setItem("browser-password", password)
+}
